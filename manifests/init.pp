@@ -38,7 +38,7 @@ define passwordless_ssh (
 
   File {
     owner => $title,
-    group => $ssh_group,
+    group => $title,
   }
 
   file { "/home/${title}/.ssh":
@@ -56,6 +56,12 @@ define passwordless_ssh (
     ensure  => file,
     mode    => '0644',
     content => inline_template("ssh-rsa ${ssh_public_key} ${title}@${::fqdn}"),
+  } ->
+
+  file { "/home/${title}/.ssh/config":
+    ensure  => file,
+    mode    => '0644',
+    content => template('passwordless_ssh/config.erb'),
   } ->
 
   ssh_authorized_key { "${title}@${::fqdn}":
