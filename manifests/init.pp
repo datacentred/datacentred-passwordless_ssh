@@ -77,7 +77,7 @@ define passwordless_ssh (
       owner   => 'root',
       group   => 'root',
       mode    => '0440',
-      content => inline_template("${title}  ${sudo_host}=(${sudo_users}) NOPASSWD:${sudo_applications}"),
+      content => inline_template("${title}\t${sudo_host}=(${sudo_users}) NOPASSWD:${sudo_applications}"),
     }
 
   }
