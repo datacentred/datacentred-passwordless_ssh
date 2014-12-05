@@ -27,6 +27,9 @@
 # [*sudo_applications*]
 #   Applications sudo is allowed to execute [Optional]
 #
+# [*home*]
+#   Explicitly set the absolute home directory [Optional]
+#
 define passwordless_ssh (
   $ssh_private_key,
   $ssh_public_key,
@@ -34,31 +37,38 @@ define passwordless_ssh (
   $sudo_host = 'ALL',
   $sudo_users = 'ALL',
   $sudo_applications = 'ALL',
+  $home = undef,
 ) {
+
+  if $home {
+    $real_home = $home,
+  } else {
+    $real_home = "/home/${title}"
+  }
 
   File {
     owner => $title,
     group => $title,
   }
 
-  file { "/home/${title}/.ssh":
+  file { "${real_home}/.ssh":
     ensure => directory,
     mode   => '0755',
   } ->
 
-  file { "/home/${title}/.ssh/id_rsa":
+  file { "${real_home}/.ssh/id_rsa":
     ensure  => file,
     mode    => '0400',
     content => $ssh_private_key,
   } ->
 
-  file { "/home/${title}/.ssh/id_rsa.pub":
+  file { "${real_home}/.ssh/id_rsa.pub":
     ensure  => file,
     mode    => '0644',
     content => inline_template("ssh-rsa ${ssh_public_key} ${title}@${::fqdn}"),
   } ->
 
-  file { "/home/${title}/.ssh/config":
+  file { "${real_home}/.ssh/config":
     ensure  => file,
     mode    => '0644',
     content => template('passwordless_ssh/config.erb'),
