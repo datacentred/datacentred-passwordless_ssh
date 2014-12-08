@@ -2,3 +2,10 @@ User <%= @title %>
 StrictHostKeyChecking no
 UserKnownHostsFile /dev/null
 PubkeyAuthentication yes
+<% @options.each do |section,args| -%>
+
+<%= section %>
+<% args.each do |key,value| -%>
+<%= key %> <%= value %>
+<% end -%>
+<% end -%>

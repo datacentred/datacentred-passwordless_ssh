@@ -33,6 +33,7 @@
 define passwordless_ssh (
   $ssh_private_key,
   $ssh_public_key,
+  $options = {},
   $sudo = false,
   $sudo_host = 'ALL',
   $sudo_users = 'ALL',
