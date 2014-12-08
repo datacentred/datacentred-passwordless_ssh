@@ -41,7 +41,7 @@ define passwordless_ssh (
 ) {
 
   if $home {
-    $real_home = $home,
+    $real_home = $home
   } else {
     $real_home = "/home/${title}"
   }
