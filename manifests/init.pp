@@ -37,7 +37,7 @@ define passwordless_ssh (
   $sudo = false,
   $sudo_host = 'ALL',
   $sudo_users = 'ALL',
-  $sudo_applications = 'ALL',
+  $sudo_applications = [ 'ALL' ]
   $home = undef,
 ) {
 
@@ -88,7 +88,7 @@ define passwordless_ssh (
       owner   => 'root',
       group   => 'root',
       mode    => '0440',
-      content => inline_template("${title}\t${sudo_host}=(${sudo_users}) NOPASSWD:${sudo_applications}"),
+      content => inline_template("${title}\t${sudo_host}=(${sudo_users}) NOPASSWD:<%= @sudo_applications.join(',') %>"),
     }
 
   }
